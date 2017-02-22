@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>Mathsteps demo v.02</title> 
+
+    <script type="text/javascript" language="javascript">
+    
+      function solve(expression)
+      {
+        const result = MS.solveEquation(expression);
+        if (result.error) {
+           appendText("Error: " + result.error); 
+        }
+        else {
+          const steps = result.steps;
+          steps.forEach(step => {
+            // Note: the mathsteps API will likely change after the
+            // switch from the mathjs parser to math-parser has been made.
+            appendText("Before change: " + step.oldEquation.print() + "\r");
+            appendText("Change: " + step.changeType + "\r");
+            appendText("After change: " + step.newEquation.print() + "\r");
+            appendText("# of substeps: " + step.substeps.length + "\r\r");
+          });
+        }
+        appendText("\r\r");
+        document.getElementById("resultTextArea").scrollTop = document.getElementById("resultTextArea").scrollHeight; 
+      }
+    
+      function appendText(text) {
+        var obj=document.getElementById("resultTextArea");
+        obj.value += text;
+      }
+    
+      var handleKeyPress = function(evt){
+        var key = evt.which || evt.charCode || evt.keyCode || 0;
+        if (key == 13) solve(document.getElementById('inputTextField').value);
+      };
+      
+    </script>
+
+  </head>
+
+  <body>
+
+    <h2>Mathsteps Demo v.01</h2>
+    mathsteps project website <a href="https://github.com/socraticorg/mathsteps">https://github.com/socraticorg/mathsteps</a>
+    
+    <noscript>
+      <div style="width: 22em; position: absolute; left: 50%; margin-left: -11em; color: red; background-color:white; border: 1px solid red; padding: 4px; font-family: sans-serif">
+      Your web browser must have JavaScript enabled
+      in order for this application to display correctly.
+      </div>
+    </noscript>
+    
+    <FORM NAME="casForm" METHOD="post" onSubmit="return false" >
+      <p><textarea NAME="resultTextArea" id="resultTextArea" rows="25" cols="80"  wrap='off'></textarea> </p>
+      <P>Enter an equation: <INPUT TYPE=TEXT NAME="inputTextField" id="inputTextField" SIZE=40 onKeyDown="handleKeyPress(event);" value="-16*x + 12 = 39 - (7*x)"   /></p>
+      <P><INPUT TYPE="button" VALUE="Solve" name="solveButton" id="solveButton" onClick="solve(this.form.inputTextField.value);"></p>
+      <P><INPUT TYPE="button" VALUE="Clear Input Text Box" name="clearInputButton" onClick="this.form.inputTextField.value=''"></p>
+      <P><INPUT TYPE="button" VALUE="Clear Result Text Area" name="clearResultButton" onClick="this.form.resultTextArea.value=''"></p>
+    </FORM>
+    
+    <script type="text/javascript" language="javascript" src="mathsteps.js"></script>
+
+  </body>
+
+</html>
+
